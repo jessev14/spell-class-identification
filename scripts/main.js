@@ -62,6 +62,19 @@ Hooks.on('renderItemSheet5e', (app, [html], appData) => {
     else injectElementLocator = html.querySelector('div.tab.details').querySelector('h3');
     injectElementLocator.before(classesListDiv);
 
+    const descriptionTab = html.querySelector('div.tab[data-tab="description"]');
+    const itemPropertiesDiv = descriptionTab.querySelector('div.item-properties');
+    const propertiesOl = itemPropertiesDiv.querySelector('ol.properties-list');
+    for (let i = dnd5eClasses.length - 1; i >= 0; i--) {
+        const className = dnd5eClasses[i];
+        const flagData = item.getFlag(moduleID, className);
+        if (!flagData) continue;
+        
+        const li = document.createElement('li');
+        li.innerText = className;
+        propertiesOl.prepend(li);
+    }
+
     app.setPosition({ height: 'auto' });
 });
 
