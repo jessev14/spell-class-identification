@@ -59,6 +59,7 @@ Hooks.on('renderItemSheet5e', (app, [html], appData) => {
 
     let injectElementLocator;
     if (item.type === 'spell') injectElementLocator = html.querySelector('div.spell-components.form-group.stacked');
+    else if (item.type === 'feat') injectElementLocator = html.querySelector('select[data-tidy-field="system.type.value"]').closest('div.form-group');
     else injectElementLocator = html.querySelector('div.tab.details').querySelector('h3');
     injectElementLocator.before(classesListDiv);
 
