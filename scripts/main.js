@@ -19,11 +19,6 @@ const dnd5eClasses = [
 const lg = x => console.log(x);
 
 
-Hooks.once('init', () => {
-    if (game.modules.get('compendium-browser')?.active) libWrapper.register(moduleID, 'CompendiumBrowser.prototype.passesFilter', newPassesFilter, 'MIXED');
-});
-
-
 Hooks.on('renderCompendiumBrowser', (app, [html], appData) => {
     const classFilterDiv = html.querySelector('div.filter[data-path="classes"]');
     const classFilterSelect = classFilterDiv.querySelector('select');
