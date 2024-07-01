@@ -19,22 +19,6 @@ const dnd5eClasses = [
 const lg = x => console.log(x);
 
 
-Hooks.on('renderCompendiumBrowser', (app, [html], appData) => {
-    const classFilterDiv = html.querySelector('div.filter[data-path="classes"]');
-    const classFilterSelect = classFilterDiv.querySelector('select');
-    classFilterSelect.innerHTML = ``;
-    const option = document.createElement('option');
-    option.value = 'null';
-    option.innerText = '-';
-    classFilterSelect.appendChild(option);
-    for (const className of dnd5eClasses) {
-        const option = document.createElement('option');
-        option.value = className.toLowerCase();
-        option.innerText = className;
-        classFilterSelect.appendChild(option);
-    }
-});
-
 Hooks.on('renderItemSheet5e', (app, [html], appData) => {
     const item = app.object;
     if (!['spell', 'feat'].includes(item.type)) return;
@@ -73,29 +57,3 @@ Hooks.on('renderItemSheet5e', (app, [html], appData) => {
 
     app.setPosition({ height: 'auto' });
 });
-
-
-function newPassesFilter(wrapped, subject, filters) {
-    const newFilters = { ...filters };
-    const flagData = subject.flags[moduleID] || {};
-    let filterClass, classInFlagData;
-    for (const path of ['classes', 'classRequirement']) {
-        if (!(path in newFilters)) continue;
-
-        filterClass = newFilters[path]?.value;
-        classInFlagData = flagData[`${filterClass[0].toUpperCase()}${filterClass.slice(1)}`];
-        delete newFilters[path];
-    }
-
-    if (!classInFlagData) {
-        let useBackup = true;
-        useBackup = !Object.values(flagData).some(k => k);
-        if (useBackup) return wrapped(subject, filters);
-    }
-    
-
-    const res = wrapped(subject, newFilters);
-    if (classInFlagData && res) return true;
-    
-    return false;
-}
